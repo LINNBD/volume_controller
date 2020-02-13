@@ -24,14 +24,13 @@ static const char *const evval[3] = {
  */
 int open_device(int index)
 {
-    int fd; {
+    int fd;
         char path[256];
         SET_DEVICE_PATH(index, path);
 
         if ((fd = open(path, O_RDONLY | O_NONBLOCK)) < 0)
             fprintf(stderr, "Cannot open %s: %s.\n",
                 path, strerror(errno));
-    }
 
     return fd;
 }
@@ -68,7 +67,7 @@ int main(int argc, char** argv)
     struct input_event ev;
     int fd;
 
-    if ((fd = open_device(4)) < 0)
+    if ((fd = open_device(3)) < 0)
         return EXIT_FAILURE;
 
     int flag = 0;
@@ -81,31 +80,23 @@ int main(int argc, char** argv)
             switch(ev.type) {
                 case EV_KEY:
                     switch(ev.code) {
-                        case KEY_M:
-                            if (ev.value == 1) {
-                                system("amixer set 'Master' unmute");
-                            }
-                            break;
                         case KEY_LEFTCTRL:
                             if (ev.value == 2) {
                                 flag = 1;
-                                printf("flag update");
+
                             } else if (ev.value != 2){
                                 flag = 0;
                             }
                             break;
                         case KEY_DOWN:
-                            printf("UP\n %d\n", flag);
+
                             if(flag == 1) {
-                                printf("flag");
                                 system("amixer set 'Master' 5%-");
                             }
                             break;
 
                         case KEY_UP:
-                            printf("UP\n %d\n", flag);
                             if(flag == 1) {
-                                printf("flag");
                                 system("amixer set 'Master' 5%+");
                             }
                             break;
