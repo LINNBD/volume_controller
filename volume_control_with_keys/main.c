@@ -116,14 +116,6 @@ int main(int argc, char** argv)
                             }
                             break;
 
-                        case KEY_DOWN:
-                            printf("Key Pressed = \"DOWN\"\n");
-                            printf("flag = %d\n", flag);
-                            if(flag == 1 && ev.value != 0) {
-                                system("amixer set 'Master' 5%-");
-                            }
-                            break;
-
                         case KEY_UP:
                             printf("Key Pressed = \"UP\"\n");
                             printf("flag = %d\n", flag);
@@ -131,6 +123,15 @@ int main(int argc, char** argv)
                                 system("amixer set 'Master' unmute 5%+");
                             }
                             break;
+
+                        case KEY_DOWN:
+                            printf("Key Pressed = \"DOWN\"\n");
+                            printf("flag = %d\n", flag);
+                            if(flag == 1 && ev.value != 0) {
+                                system("amixer set 'Master' 5%-");
+                            }
+                            break;
+                            
                         default:
                             break;
                     }
