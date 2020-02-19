@@ -36,9 +36,6 @@ int open_device(int index)
     return fd;
 }
 
-/*
- *
- */
 int event_occurred(int f, struct input_event* event)
 {
     ssize_t n;
@@ -51,9 +48,6 @@ int event_occurred(int f, struct input_event* event)
     return 1;
 }
 
-/*
- *
- */
 int event_is_keyboard(struct input_event* event)
 {
     return (event->type == EV_KEY && event->value >= 0 && event->value <= 2);
@@ -76,7 +70,7 @@ int main(int argc, char** argv)
     for(;;) {
         if (event_occurred(fd, &ev) && event_is_keyboard(&ev)) {
             printf("\n\n type = %d\n", ev.type);
-            printf("\n\n code = %u\n", ev.code);
+            printf(" code = %u\n", ev.code);
 
             switch(ev.type) {
                 case EV_KEY:
@@ -84,31 +78,33 @@ int main(int argc, char** argv)
                         case KEY_LEFTCTRL:
                             if (ev.value == 2) {
                                 flag = 1;
-                                printf("flag updated");
+                                printf("flag updated\n");
                             } else if (ev.value != 2){
                                 flag = 0;
                             }
                             break;
 
-                        /*case KEY_F:
+                        /*
+                        case KEY_F:
                             printf("F\n flag = %d\n", flag);
                             if(flag == 1) {
                                 system("pactl set-sink-volume 0 100%");
                             }
-                            break;*/
+                            break;
+                        */
 
                         case KEY_M:
                             printf("Key Pressed = \"M\"\n");
-                            printf("flag = %d\n", flag);
+                            printf("flag = %d", flag);
                             if(flag == 1 && ev.value == 1) {
                                 if(mute_flag == 0) {
-                                    system("amixer sset Master mute");
+                                    system("amixer set Master mute");
                                     system("amixer set Headphone mute");
                                     system("amixer set Speaker mute");
                                     mute_flag = 1;
                                 }
                                 else {
-                                    system("amixer sset Master unmute");
+                                    system("amixer set Master unmute");
                                     system("amixer set Headphone unmute");
                                     system("amixer set Speaker unmute");
                                     mute_flag = 0;
@@ -120,7 +116,7 @@ int main(int argc, char** argv)
                             printf("Key Pressed = \"UP\"\n");
                             printf("flag = %d\n", flag);
                             if(flag == 1 && ev.value != 0) {
-                                system("amixer set 'Master' unmute 5%+");
+                                system("amixer set Master 5%+");
                             }
                             break;
 
@@ -128,19 +124,20 @@ int main(int argc, char** argv)
                             printf("Key Pressed = \"DOWN\"\n");
                             printf("flag = %d\n", flag);
                             if(flag == 1 && ev.value != 0) {
-                                system("amixer set 'Master' 5%-");
+                                system("amixer set Master 5%-");
                             }
                             break;
-                            
+
                         default:
                             break;
                     }
                     break;
+
                 default:
                     break;
             }
 
-            printf("value = %d, %s 0x%04x (%d)\n", ev.value, evval[ev.value], (int)ev.code, (int)ev.code);
+            printf("event value = %d, %s 0x%04x (%d)\n", ev.value, evval[ev.value], (int)ev.code, (int)ev.code);
 
         }
     }
